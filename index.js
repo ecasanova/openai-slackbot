@@ -20,23 +20,28 @@ const openAiConfiguration = new Configuration({
 
 const openai = new OpenAIApi(openAiConfiguration);
 
+const openApiSearch = async (event) => {
+  let query = event.text.substr(event.text.indexOf(" ") + 1);
+  let rsp = await openai.createCompletion({
+    model: "text-davinci-003",
+    prompt: query,
+    temperature: 0.5,
+    max_tokens: 1024,
+    top_p: 1.0,
+    frequency_penalty: 0.5,
+    presence_penalty: 0.0,
+    stop: ["You:"],
+  });
+  return rsp.data.choices[0].text.replace(/[\r\n]/gm, "");
+};
+
 app.event("app_mention", async ({ event, say }) => {
   try {
-    let query = event.text.substr(event.text.indexOf(" ") + 1);
-    const rsp = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: query,
-      temperature: 0.5,
-      max_tokens: 1024,
-      top_p: 1.0,
-      frequency_penalty: 0.5,
-      presence_penalty: 0.0,
-      stop: ["You:"],
-    });
-    let rspChat = rsp.data.choices[0].text.replace(/[\r\n]/gm, "");
-    await say(`<@${event.user}>: ${rspChat}`);
+    let rsp = await openApiSearch(event);
+    await say(`<@${event.user}>: ${rsp}`);
   } catch (error) {
     console.error(error);
   }
 });
+
 app.start(3000);

@@ -12,8 +12,12 @@ You must configure the following permissions in your Slack App and generate the 
 app_mentions:read
 im:read
 im:write
+im:history
 mpim:read
 mpim:write
+mpim:history
+channels:history
+groups:history
 ```
 
 You also need setup socket mode in your app
