@@ -115,3 +115,7 @@ app.event("app_mention", async ({ event, say }) => {
   await app.start(process.env.PORT || 3000);
   console.log("⚡️ OpenAi Slack bot is running!");
 })();
+
+app.get("/", (req, res) => {
+  res.sendStatus(200);
+});
