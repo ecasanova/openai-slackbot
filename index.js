@@ -5,6 +5,16 @@ const { App, LogLevel, ExpressReceiver } = SlackBot;
 
 dotenv.config();
 
+const databaseData = {};
+const database = {
+  set: async (key, data) => {
+    databaseData[key] = data;
+  },
+  get: async (key) => {
+    return databaseData[key];
+  },
+};
+
 const receiver = new ExpressReceiver({
   logLevel: LogLevel.DEBUG,
   signingSecret: process.env.SLACK_SIGNING_SECRET,
