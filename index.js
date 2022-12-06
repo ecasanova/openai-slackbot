@@ -11,6 +11,7 @@ const receiver = new ExpressReceiver({
   clientId: process.env.SLACK_CLIENT_ID,
   clientSecret: process.env.SLACK_CLIENT_SECRET,
   stateSecret: "my-state-secret",
+  signatureVerification: "v2",
   scopes: [
     "app_mentions:read",
     "im:read",
