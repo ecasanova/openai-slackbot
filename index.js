@@ -27,7 +27,7 @@ app.event("app_mention", async ({ event, say }) => {
       model: "text-davinci-003",
       prompt: query,
       temperature: 0.5,
-      max_tokens: 1000,
+      max_tokens: 1024,
       top_p: 1.0,
       frequency_penalty: 0.5,
       presence_penalty: 0.0,
