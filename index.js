@@ -124,11 +124,8 @@ boltApp.event("app_mention", async ({ event, say }) => {
   }
 });
 
-receiver.router.get("/", (_req, res) => {
-  res.writeHead(302, {
-    Location: "slack/install",
-  });
-  res.end();
+receiver.router.get("/", (req, res) => {
+  res.send(202);
 });
 
 (async () => {
