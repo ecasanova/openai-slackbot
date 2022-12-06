@@ -53,6 +53,6 @@ npm start
 
 ## Dependencies
 
-[OpenAi](https://openai.com/)
+[OpenAI](https://openai.com/)
 
-[Slack Bolt Js](https://slack.dev/bolt-js/concepts)
+[Slack-BoltJs](https://slack.dev/bolt-js/concepts)
