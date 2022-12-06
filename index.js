@@ -86,6 +86,7 @@ const receiver = new ExpressReceiver({
     // without rendering the web page with "Add to Slack" button.
     // This flag is available in @slack/bolt v3.7 or higher
     directInstall: true,
+    legacyStateVerification: true,
   },
 });
 
@@ -117,6 +118,7 @@ const openApiSearch = async (event) => {
 
 boltApp.event("app_mention", async ({ event, say }) => {
   try {
+    console.log("app_mention");
     let rsp = await openApiSearch(event);
     await say(`<@${event.user}>: ${rsp}`);
   } catch (error) {
