@@ -2,15 +2,17 @@
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/webfactorystudio)
 
+## Install on your Slack
+
+[![Install](https://platform.slack-edge.com/img/add_to_slack.png)](https://openai-slackbot.onrender.com/slack/install)
+
+# Local Installation
+
 You need to register an app with Slack. To do this, visit: https://api.slack.com/apps/
 
 You also need to register personal OpenAI API-Keys, visit: https://beta.openai.com/account/api-keys
 
-## Install on your Slack
-
-
-[![Install](https://platform.slack-edge.com/img/add_to_slack.png)](https://openai-slackbot.onrender.com/slack/install)
-
+You need to setup socket mode
 
 ## Permissions Scopes
 
