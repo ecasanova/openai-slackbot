@@ -8,7 +8,8 @@ You also need to register personal OpenAI API-Keys, visit: https://beta.openai.c
 
 ## Install on your Slack
 
-[![Install]([https://img.shields.io/badge/slack.svg](https://platform.slack-edge.com/img/add_to_slack.png))](https://openai-slackbot.onrender.com/slack/install)
+
+[![Install](https://platform.slack-edge.com/img/add_to_slack.png)](https://openai-slackbot.onrender.com/slack/install)
 
 
 ## Permissions Scopes
