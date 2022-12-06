@@ -33,5 +33,6 @@ SLACK_APP_TOKEN=
 ## Run the app
 
 ```
+npm install
 npm start
 ```
