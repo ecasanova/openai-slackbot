@@ -1,12 +1,11 @@
 import SlackBot from "@slack/bolt";
 import dotenv from "dotenv";
 import { Configuration, OpenAIApi } from "openai";
-
 const { App, LogLevel } = SlackBot;
 
 dotenv.config();
 
-const app = new App({
+const boltApp = new App({
   logLevel: LogLevel.DEBUG,
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   clientId: process.env.SLACK_CLIENT_ID,
@@ -75,7 +74,7 @@ const app = new App({
     // If this is true, /slack/install redirects installers to the Slack authorize URL
     // without rendering the web page with "Add to Slack" button.
     // This flag is available in @slack/bolt v3.7 or higher
-    // directInstall: true,
+    directInstall: true,
   },
 });
 
@@ -101,7 +100,7 @@ const openApiSearch = async (event) => {
   return rsp.data.choices[0].text.replace(/[\r\n]/gm, "");
 };
 
-app.event("app_mention", async ({ event, say }) => {
+boltApp.event("app_mention", async ({ event, say }) => {
   try {
     let rsp = await openApiSearch(event);
     await say(`<@${event.user}>: ${rsp}`);
@@ -112,10 +111,6 @@ app.event("app_mention", async ({ event, say }) => {
 
 (async () => {
   // Start your app
-  await app.start(process.env.PORT || 3000);
+  await boltApp.start(process.env.PORT || 3000);
   console.log("⚡️ OpenAi Slack bot is running!");
 })();
-
-app.get("/", (req, res) => {
-  res.sendStatus(200);
-});
