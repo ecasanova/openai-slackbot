@@ -115,7 +115,10 @@ boltApp.event("app_mention", async ({ event, say }) => {
 });
 
 receiver.router.get("/", (_req, res) => {
-  res.send("Welcome to the OpenAI Slack bot!");
+  res.writeHead(302, {
+    Location: "slack/install",
+  });
+  res.end();
 });
 
 (async () => {
