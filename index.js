@@ -20,6 +20,7 @@ const app = new App({
     "mpim:read",
     "mpim:write",
     "mpim:history",
+    "channels:read",
     "channels:history",
     "groups:history",
   ],
