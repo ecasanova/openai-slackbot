@@ -125,7 +125,8 @@ boltApp.event("app_mention", async ({ event, say }) => {
 });
 
 receiver.router.get("/", (req, res) => {
-  res.send(202);
+  res.send("⚡️ Welcome to the OpenAI Slack bot! ⚡️");
+  res.status(200);
 });
 
 (async () => {
