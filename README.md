@@ -1,4 +1,6 @@
-# OpenAI Slack Bot
+# OpenAI Slack Bot 
+
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/webfactorystudio)
 
 You need to register an app with Slack. To do this, visit: https://api.slack.com/apps/
 
