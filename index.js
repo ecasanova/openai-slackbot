@@ -33,9 +33,8 @@ app.event("app_mention", async ({ event, say }) => {
       presence_penalty: 0.0,
       stop: ["You:"],
     });
-    console.log(rsp.data);
-    //let rspChat = rsp.data.choices[0].text.replace(/[\r\n]/gm, "");
-    //await say(`<@${event.user}>: ${rspChat}`);
+    let rspChat = rsp.data.choices[0].text.replace(/[\r\n]/gm, "");
+    await say(`<@${event.user}>: ${rspChat}`);
   } catch (error) {
     console.error(error);
   }
