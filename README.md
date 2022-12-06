@@ -4,7 +4,7 @@
 
 ## Install on your Slack
 
-[![Install](https://platform.slack-edge.com/img/add_to_slack.png)](https://openai-slackbot.onrender.com/slack/install)
+[![Install](https://platform.slack-edge.com/img/add_to_slack.png)](https://slack.com/oauth/v2/authorize?client_id=4469473983430.4488721317217&scope=app_mentions:read,incoming-webhook,chat:write,chat:write.public,channels:history,groups:history,im:history,mpim:history&user_scope=)
 
 # Local Installation
 
