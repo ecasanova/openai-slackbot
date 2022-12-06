@@ -1,4 +1,4 @@
-# OpenAI Slack Bot 
+# 🤖 OpenAI Slack Bot 🤖
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/webfactorystudio)
 
@@ -48,3 +48,9 @@ SLACK_APP_TOKEN=
 npm install
 npm start
 ```
+
+## Dependencies
+
+[OpenAi](https://openai.com/)
+
+[Slack Bolt Js](https://slack.dev/bolt-js/concepts)
