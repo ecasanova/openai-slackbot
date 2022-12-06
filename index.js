@@ -12,7 +12,17 @@ const app = new App({
   clientId: process.env.SLACK_CLIENT_ID,
   clientSecret: process.env.SLACK_CLIENT_SECRET,
   stateSecret: "my-state-secret",
-  scopes: ["chat:write"],
+  scopes: [
+    "app_mentions:read",
+    "im:read",
+    "im:write",
+    "im:history",
+    "mpim:read",
+    "mpim:write",
+    "mpim:history",
+    "channels:history",
+    "groups:history",
+  ],
   installationStore: {
     storeInstallation: async (installation) => {
       // change the line below so it saves to your database
