@@ -6,6 +6,11 @@ You need to register an app with Slack. To do this, visit: https://api.slack.com
 
 You also need to register personal OpenAI API-Keys, visit: https://beta.openai.com/account/api-keys
 
+## Install on your Slack
+
+[![Install](https://img.shields.io/badge/slack.svg)](https://openai-slackbot.onrender.com/slack/install)
+
+
 ## Permissions Scopes
 
 You must configure the following permissions in your Slack App and generate the OAuth tokens
