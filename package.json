@@ -1,0 +1,17 @@
+{
+  "name": "openai-slackbot",
+  "version": "1.0.0",
+  "description": "OpenAI Slack Bot",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Enrique Casanova",
+  "license": "MIT",
+  "dependencies": {
+    "@slack/bolt": "^3.12.2",
+    "dotenv": "^16.0.3",
+    "openai": "^3.1.0"
+  }
+}
