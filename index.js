@@ -1,11 +1,11 @@
 import SlackBot from "@slack/bolt";
 import dotenv from "dotenv";
 import { Configuration, OpenAIApi } from "openai";
-const { App, LogLevel } = SlackBot;
+const { App, LogLevel, ExpressReceiver } = SlackBot;
 
 dotenv.config();
 
-const boltApp = new App({
+const receiver = new ExpressReceiver({
   logLevel: LogLevel.DEBUG,
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   clientId: process.env.SLACK_CLIENT_ID,
@@ -78,6 +78,10 @@ const boltApp = new App({
   },
 });
 
+const boltApp = new App({
+  receiver,
+});
+
 const openAiConfiguration = new Configuration({
   organization: process.env.OPENAI_ORG_ID,
   apiKey: process.env.OPENAI_API_KEY,
@@ -107,6 +111,10 @@ boltApp.event("app_mention", async ({ event, say }) => {
   } catch (error) {
     console.error(error);
   }
+});
+
+receiver.router.get("/", (_req, res) => {
+  res.send("Welcome to the OpenAI Slack bot!");
 });
 
 (async () => {
