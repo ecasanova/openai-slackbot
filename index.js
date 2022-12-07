@@ -23,6 +23,11 @@ const receiver = new ExpressReceiver({
   stateSecret: "my-state-secret",
   signatureVerification: "v2",
   scopes: [
+    "chat:write",
+    "chat:write.public",
+    "commands",
+    "chat:write.customize",
+    "chat:read",
     "app_mentions:read",
     "im:read",
     "im:write",
