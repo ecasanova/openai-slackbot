@@ -44,6 +44,11 @@ OPENAI_ORG_ID=
 SLACK_SIGNING_SECRET=
 SLACK_OAUTH_TOKEN=
 SLACK_APP_TOKEN=
+PORT=
+SLACK_CLIENT_SECRET=
+SLACK_CLIENT_ID=
+ENVIRONMENT=                #(development|production)
+HOSTNAME_URL=               #(localhost|www.example.com)
 ```
 
 ## Run the app
