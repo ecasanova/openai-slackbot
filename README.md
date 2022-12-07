@@ -66,4 +66,4 @@ npm start
 
 [OpenAI](https://openai.com/)
 
-[Slack-BoltJs](https://slack.dev/bolt-js/concepts)
+[SlackAPI-boltjs](https://github.com/SlackAPI/bolt-js)
