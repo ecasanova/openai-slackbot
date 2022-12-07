@@ -53,7 +53,7 @@ npm start
 
 ## Screenshots
 
-[image1](screenshots/slack.png)
+![image1](screenshots/slack.png)
 
 ## Dependencies
 
