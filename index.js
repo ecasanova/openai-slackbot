@@ -8,7 +8,7 @@ dotenv.config();
 const hostname =
   process.env.ENVIRONMENT == "development"
     ? `http://localhost:${process.env.PORT}`
-    : `https://${process.env.HOSTNAME}`;
+    : `https://${process.env.HOSTNAME_URL}`;
 
 /* OpenAI Config */
 const openAiConfiguration = new Configuration({
