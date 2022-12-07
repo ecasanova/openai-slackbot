@@ -24,17 +24,16 @@ const receiver = new ExpressReceiver({
   signatureVerification: "v2",
   scopes: [
     "app_mentions:read",
-    "im:read",
-    "im:write",
-    "im:history",
-    "mpim:read",
-    "mpim:write",
-    "mpim:history",
-    "channels:read",
     "channels:history",
+    "channels:read",
     "chat:write",
     "chat:write.public",
     "groups:history",
+    "im:history",
+    "incoming-webhook",
+    "mpim:history",
+    "chat:write.customize",
+    "channels:join",
   ],
   installationStore: {
     storeInstallation: async (installation) => {
