@@ -69,9 +69,6 @@ const app = new App({
   redirectUri: `${hostname}/slack/oauth_redirect`, // here
   installationStore: new FileInstallationStore(),
   installerOptions: {
-    // If this is true, /slack/install redirects installers to the Slack authorize URL
-    // without rendering the web page with "Add to Slack" button.
-    // This flag is available in @slack/bolt v3.7 or higher
     directInstall: true,
     legacyStateVerification: true,
     redirectUriPath: `/slack/oauth_redirect`, // and here!
@@ -80,7 +77,6 @@ const app = new App({
 
 app.event("app_mention", async ({ event, say }) => {
   try {
-    console.log("app_mention");
     let rsp = await openApiSearch(event);
     await say(`<@${event.user}>: ${rsp}`);
   } catch (error) {
@@ -91,9 +87,7 @@ app.event("app_mention", async ({ event, say }) => {
 (async () => {
   // Start your app
   try {
-    console.log(
-      `⚡️ OpenAi Slack bot is running on: ${hostname}/slack/install`
-    );
+    console.log(`⚡️ OpenAiSlack bot is running: ${hostname}/slack/install`);
     await app.start(process.env.PORT || 3000);
   } catch (error) {
     console.error("Unable to start App", error);
