@@ -51,6 +51,10 @@ npm install
 npm start
 ```
 
+## Screenshots
+
+[image1](screenshots/slack.png)
+
 ## Dependencies
 
 [OpenAI](https://openai.com/)
