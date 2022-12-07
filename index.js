@@ -16,18 +16,13 @@ const database = {
 };
 
 const receiver = new ExpressReceiver({
-  logLevel: LogLevel.DEBUG,
+  logLevel: LogLevel.ERROR,
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   clientId: process.env.SLACK_CLIENT_ID,
   clientSecret: process.env.SLACK_CLIENT_SECRET,
   stateSecret: "my-state-secret",
   signatureVerification: "v2",
   scopes: [
-    "chat:write",
-    "chat:write.public",
-    "commands",
-    "chat:write.customize",
-    "chat:read",
     "app_mentions:read",
     "im:read",
     "im:write",
@@ -37,6 +32,8 @@ const receiver = new ExpressReceiver({
     "mpim:history",
     "channels:read",
     "channels:history",
+    "chat:write",
+    "chat:write.public",
     "groups:history",
   ],
   installationStore: {
@@ -139,5 +136,7 @@ receiver.router.get("/", (req, res) => {
 (async () => {
   // Start your app
   await boltApp.start(process.env.PORT || 3000);
-  console.log("⚡️ OpenAi Slack bot is running!");
+  console.log(
+    `⚡️ OpenAi Slack bot is running on: http://localhost:${process.env.PORT}/slack/install`
+  );
 })();
