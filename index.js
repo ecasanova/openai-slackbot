@@ -30,11 +30,11 @@ const openApiSearch = async (event) => {
   return rsp.data.choices[0].text.replace(/[\r\n]/gm, "");
 };
 
-const receiver = new ExpressReceiver({
+const app = new App({
   logLevel: LogLevel.DEBUG,
+  signingSecret: process.env.SLACK_SIGNING_SECRET, // Find in Basic Information Tab
+  appToken: process.env.SLACK_APP_TOKEN, // Token from the App-level Token that we created
   socketMode: true,
-  appToken: process.env.SLACK_APP_TOKEN,
-  signingSecret: process.env.SLACK_SIGNING_SECRET,
   clientId: process.env.SLACK_CLIENT_ID,
   clientSecret: process.env.SLACK_CLIENT_SECRET,
   stateSecret: "my-state-secret",
@@ -61,8 +61,8 @@ const receiver = new ExpressReceiver({
   },
 });
 
-const app = new App({
-  receiver,
+const receiver = new ExpressReceiver({
+  logLevel: LogLevel.DEBUG,
 });
 
 app.event("app_mention", async ({ event, say }) => {
@@ -83,7 +83,6 @@ receiver.router.get("/", (req, res) => {
 (async () => {
   // Start your app
   try {
-    await app.start(process.env.PORT || 3000);
     let hostname =
       process.env.ENVIRONMENT == "development"
         ? `http://localhost:${process.env.PORT}`
@@ -91,6 +90,7 @@ receiver.router.get("/", (req, res) => {
     console.log(
       `⚡️ OpenAi Slack bot is running on: ${hostname}/slack/install`
     );
+    await app.start(process.env.PORT || 3000);
   } catch (error) {
     console.error("Unable to start App", error);
     process.exit(1);
