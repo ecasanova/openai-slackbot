@@ -30,11 +30,11 @@ const openApiSearch = async (event) => {
   return rsp.data.choices[0].text.replace(/[\r\n]/gm, "");
 };
 
-const app = new App({
+const receiver = new ExpressReceiver({
   logLevel: LogLevel.DEBUG,
   signingSecret: process.env.SLACK_SIGNING_SECRET, // Find in Basic Information Tab
   appToken: process.env.SLACK_APP_TOKEN, // Token from the App-level Token that we created
-  socketMode: true,
+  socketMode: false,
   clientId: process.env.SLACK_CLIENT_ID,
   clientSecret: process.env.SLACK_CLIENT_SECRET,
   stateSecret: "my-state-secret",
@@ -61,8 +61,8 @@ const app = new App({
   },
 });
 
-const receiver = new ExpressReceiver({
-  logLevel: LogLevel.DEBUG,
+const app = new App({
+  receiver,
 });
 
 app.event("app_mention", async ({ event, say }) => {
@@ -91,6 +91,7 @@ receiver.router.get("/", (req, res) => {
       `⚡️ OpenAi Slack bot is running on: ${hostname}/slack/install`
     );
     await app.start(process.env.PORT || 3000);
+    //await receiver.start(process.env.PORT || 3000);
   } catch (error) {
     console.error("Unable to start App", error);
     process.exit(1);
