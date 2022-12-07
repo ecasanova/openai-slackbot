@@ -8,9 +8,11 @@ dotenv.config();
 const databaseData = {};
 const database = {
   set: async (key, data) => {
+    console.log("key");
     databaseData[key] = data;
   },
   get: async (key) => {
+    console.log("key");
     return databaseData[key];
   },
 };
