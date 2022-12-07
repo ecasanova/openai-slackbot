@@ -1,110 +1,20 @@
 import SlackBot from "@slack/bolt";
 import dotenv from "dotenv";
 import { Configuration, OpenAIApi } from "openai";
-const { App, LogLevel, ExpressReceiver } = SlackBot;
+const { App, LogLevel, ExpressReceiver, FileInstallationStore } = SlackBot;
 
 dotenv.config();
 
-const databaseData = {};
-const database = {
-  set: async (key, data) => {
-    console.log(key, data);
-    databaseData[key] = data;
-  },
-  get: async (key) => {
-    console.log(key, data);
-    return databaseData[key];
-  },
-};
-
-const receiver = new ExpressReceiver({
-  logLevel: LogLevel.ERROR,
-  signingSecret: process.env.SLACK_SIGNING_SECRET,
-  clientId: process.env.SLACK_CLIENT_ID,
-  clientSecret: process.env.SLACK_CLIENT_SECRET,
-  stateSecret: "my-state-secret",
-  socketMode: true,
-  signatureVerification: "v2",
-  scopes: [
-    "app_mentions:read",
-    "channels:history",
-    "channels:read",
-    "chat:write",
-    "chat:write.public",
-    "groups:history",
-    "im:history",
-    "incoming-webhook",
-    "mpim:history",
-    "chat:write.customize",
-    "channels:join",
-  ],
-  installationStore: {
-    storeInstallation: async (installation) => {
-      // change the line below so it saves to your database
-      if (
-        installation.isEnterpriseInstall &&
-        installation.enterprise !== undefined
-      ) {
-        // support for org wide app installation
-        return await database.set(installation.enterprise.id, installation);
-      }
-      if (installation.team !== undefined) {
-        // single team app installation
-        return await database.set(installation.team.id, installation);
-      }
-      throw new Error("Failed saving installation data to installationStore");
-    },
-    fetchInstallation: async (installQuery) => {
-      // change the line below so it fetches from your database
-      if (
-        installQuery.isEnterpriseInstall &&
-        installQuery.enterpriseId !== undefined
-      ) {
-        // org wide app installation lookup
-        return await database.get(installQuery.enterpriseId);
-      }
-      if (installQuery.teamId !== undefined) {
-        // single team app installation lookup
-        return await database.get(installQuery.teamId);
-      }
-      throw new Error("Failed fetching installation");
-    },
-    deleteInstallation: async (installQuery) => {
-      // change the line below so it deletes from your database
-      if (
-        installQuery.isEnterpriseInstall &&
-        installQuery.enterpriseId !== undefined
-      ) {
-        // org wide app installation deletion
-        return await database.delete(installQuery.enterpriseId);
-      }
-      if (installQuery.teamId !== undefined) {
-        // single team app installation deletion
-        return await database.delete(installQuery.teamId);
-      }
-      throw new Error("Failed to delete installation");
-    },
-  },
-  installerOptions: {
-    // If this is true, /slack/install redirects installers to the Slack authorize URL
-    // without rendering the web page with "Add to Slack" button.
-    // This flag is available in @slack/bolt v3.7 or higher
-    directInstall: true,
-    legacyStateVerification: true,
-  },
-});
-
-const boltApp = new App({
-  receiver,
-});
-
+/* OpenAI Config */
 const openAiConfiguration = new Configuration({
   organization: process.env.OPENAI_ORG_ID,
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+/* OpenAI Init */
 const openai = new OpenAIApi(openAiConfiguration);
 
+/* OpenAI Search */
 const openApiSearch = async (event) => {
   let query = event.text.substr(event.text.indexOf(" ") + 1);
   let rsp = await openai.createCompletion({
@@ -120,7 +30,42 @@ const openApiSearch = async (event) => {
   return rsp.data.choices[0].text.replace(/[\r\n]/gm, "");
 };
 
-boltApp.event("app_mention", async ({ event, say }) => {
+const receiver = new ExpressReceiver({
+  logLevel: LogLevel.DEBUG,
+  socketMode: true,
+  appToken: process.env.SLACK_APP_TOKEN,
+  signingSecret: process.env.SLACK_SIGNING_SECRET,
+  clientId: process.env.SLACK_CLIENT_ID,
+  clientSecret: process.env.SLACK_CLIENT_SECRET,
+  stateSecret: "my-state-secret",
+  scopes: [
+    "app_mentions:read",
+    "channels:history",
+    "channels:read",
+    "chat:write",
+    "chat:write.public",
+    "groups:history",
+    "im:history",
+    "incoming-webhook",
+    "mpim:history",
+    "chat:write.customize",
+    "channels:join",
+  ],
+  installationStore: new FileInstallationStore(),
+  installerOptions: {
+    // If this is true, /slack/install redirects installers to the Slack authorize URL
+    // without rendering the web page with "Add to Slack" button.
+    // This flag is available in @slack/bolt v3.7 or higher
+    directInstall: true,
+    legacyStateVerification: true,
+  },
+});
+
+const app = new App({
+  receiver,
+});
+
+app.event("app_mention", async ({ event, say }) => {
   try {
     console.log("app_mention");
     let rsp = await openApiSearch(event);
@@ -137,12 +82,17 @@ receiver.router.get("/", (req, res) => {
 
 (async () => {
   // Start your app
-  await boltApp.start(process.env.PORT || 3000);
-  let hostname =
-    process.env.ENVIRONMENT == "development"
-      ? `http://localhost:${process.env.PORT}`
-      : `https://${process.env.HOSTNAME}`;
-
-  console.log(process.env.ENVIRONMENT);
-  console.log(`⚡️ OpenAi Slack bot is running on: ${hostname}/slack/install`);
+  try {
+    await app.start(process.env.PORT || 3000);
+    let hostname =
+      process.env.ENVIRONMENT == "development"
+        ? `http://localhost:${process.env.PORT}`
+        : `https://${process.env.HOSTNAME}`;
+    console.log(
+      `⚡️ OpenAi Slack bot is running on: ${hostname}/slack/install`
+    );
+  } catch (error) {
+    console.error("Unable to start App", error);
+    process.exit(1);
+  }
 })();
