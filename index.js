@@ -66,12 +66,12 @@ const app = new App({
     "chat:write.customize",
     "channels:join",
   ],
-  redirectUri: `${hostname}/slack/oauth_redirect`, // here
+  redirectUri: `${hostname}/slack/oauth_redirect`,
   installationStore: new FileInstallationStore(),
   installerOptions: {
     directInstall: true,
     legacyStateVerification: true,
-    redirectUriPath: `/slack/oauth_redirect`, // and here!
+    redirectUriPath: `/slack/oauth_redirect`,
   },
 });
 
