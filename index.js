@@ -8,11 +8,11 @@ dotenv.config();
 const databaseData = {};
 const database = {
   set: async (key, data) => {
-    console.log("key");
+    console.log(key, data);
     databaseData[key] = data;
   },
   get: async (key) => {
-    console.log("key");
+    console.log(key, data);
     return databaseData[key];
   },
 };
@@ -138,7 +138,11 @@ receiver.router.get("/", (req, res) => {
 (async () => {
   // Start your app
   await boltApp.start(process.env.PORT || 3000);
-  console.log(
-    `⚡️ OpenAi Slack bot is running on: http://localhost:${process.env.PORT}/slack/install`
-  );
+  let hostname =
+    process.env.ENVIRONMENT == "development"
+      ? `http://localhost:${process.env.PORT}`
+      : `https://${process.env.HOSTNAME}`;
+
+  console.log(process.env.ENVIRONMENT);
+  console.log(`⚡️ OpenAi Slack bot is running on: ${hostname}/slack/install`);
 })();
