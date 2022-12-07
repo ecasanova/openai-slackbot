@@ -1,9 +1,14 @@
 import SlackBot from "@slack/bolt";
 import dotenv from "dotenv";
 import { Configuration, OpenAIApi } from "openai";
-const { App, LogLevel, ExpressReceiver, FileInstallationStore } = SlackBot;
+const { App, LogLevel, FileInstallationStore } = SlackBot;
 
 dotenv.config();
+
+const hostname =
+  process.env.ENVIRONMENT == "development"
+    ? `http://localhost:${process.env.PORT}`
+    : `https://${process.env.HOSTNAME}`;
 
 /* OpenAI Config */
 const openAiConfiguration = new Configuration({
@@ -30,11 +35,21 @@ const openApiSearch = async (event) => {
   return rsp.data.choices[0].text.replace(/[\r\n]/gm, "");
 };
 
-const receiver = new ExpressReceiver({
+const app = new App({
   logLevel: LogLevel.DEBUG,
   signingSecret: process.env.SLACK_SIGNING_SECRET, // Find in Basic Information Tab
   appToken: process.env.SLACK_APP_TOKEN, // Token from the App-level Token that we created
-  socketMode: false,
+  socketMode: true,
+  customRoutes: [
+    {
+      path: "/",
+      method: ["GET"],
+      handler: (req, res) => {
+        res.writeHead(200);
+        res.end("⚡️ Welcome to the OpenAI Slack bot! ⚡️");
+      },
+    },
+  ],
   clientId: process.env.SLACK_CLIENT_ID,
   clientSecret: process.env.SLACK_CLIENT_SECRET,
   stateSecret: "my-state-secret",
@@ -51,6 +66,7 @@ const receiver = new ExpressReceiver({
     "chat:write.customize",
     "channels:join",
   ],
+  redirectUri: `${hostname}/slack/oauth_redirect`, // here
   installationStore: new FileInstallationStore(),
   installerOptions: {
     // If this is true, /slack/install redirects installers to the Slack authorize URL
@@ -58,11 +74,8 @@ const receiver = new ExpressReceiver({
     // This flag is available in @slack/bolt v3.7 or higher
     directInstall: true,
     legacyStateVerification: true,
+    redirectUriPath: `/slack/oauth_redirect`, // and here!
   },
-});
-
-const app = new App({
-  receiver,
 });
 
 app.event("app_mention", async ({ event, say }) => {
@@ -75,23 +88,13 @@ app.event("app_mention", async ({ event, say }) => {
   }
 });
 
-receiver.router.get("/", (req, res) => {
-  res.status(200);
-  res.send("⚡️ Welcome to the OpenAI Slack bot! ⚡️");
-});
-
 (async () => {
   // Start your app
   try {
-    let hostname =
-      process.env.ENVIRONMENT == "development"
-        ? `http://localhost:${process.env.PORT}`
-        : `https://${process.env.HOSTNAME}`;
     console.log(
       `⚡️ OpenAi Slack bot is running on: ${hostname}/slack/install`
     );
     await app.start(process.env.PORT || 3000);
-    //await receiver.start(process.env.PORT || 3000);
   } catch (error) {
     console.error("Unable to start App", error);
     process.exit(1);
